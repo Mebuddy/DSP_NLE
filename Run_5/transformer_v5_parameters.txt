@@ -1,0 +1,155 @@
+==================================================
+TRANSFORMER NLE - ITERATION 5
+==================================================
+
+------------------------------------------------------------
+EXPERIMENT INFORMATION
+------------------------------------------------------------
+Experiment name: Hybrid Transformer (V5) Accuracy Optimization
+Experiment version: 5.0
+Date/time: 2026-08-31 18:11:16
+Notebook: transformer_nle_v5.ipynb
+Random seed: 42
+
+------------------------------------------------------------
+DATASET
+------------------------------------------------------------
+NLE OFF file: ./data/nle_off.npy
+NLE ON file: ./data/nle_on.npy
+Total paired samples: 65532
+NLE OFF shape: (65532, 2)
+NLE ON shape: (65532, 2)
+
+Train samples: 45872
+Validation samples: 9830
+Test samples: 9830
+
+Train percentage: 70%
+Validation percentage: 15%
+Test percentage: 15%
+
+------------------------------------------------------------
+PREPROCESSING
+------------------------------------------------------------
+Normalization method: Joint Standardization on NLE OFF
+Normalization scale: [1.0249016 1.0219301]
+NLE OFF mean/std: Mean=[ 0.00139027 -0.00591982], Std=[1.0249016 1.0219301]
+NLE ON mean/std: Mean=[ 0.00149855 -0.00739928], Std=[1.006306  1.0073167]
+NLE OFF RMS: 1.023426
+NLE ON RMS: 1.006826
+
+------------------------------------------------------------
+WINDOWING
+------------------------------------------------------------
+Window: 256
+Stride: 128
+Training windows: 357
+Validation windows: 75
+Test windows: 75
+
+------------------------------------------------------------
+MODEL
+------------------------------------------------------------
+Model: HybridNLEV5
+Architecture: Transformer Encoder + Point-wise MLP + Fusion Head
+Input dimension: 2
+d_model: 128
+Attention heads: 8
+Transformer layers: 4
+Feed-forward dimension: 512
+Dropout: 0.1
+Positional encoding: ON
+norm_first: True
+
+Local MLP architecture: Linear(2->64) -> GELU -> Linear(64->128) -> GELU -> Linear(128->128)
+Fusion architecture: Concat -> Linear(256->128) -> GELU -> Dropout(0.1) -> Linear(128->2)
+
+Total trainable parameters: 851,650
+
+------------------------------------------------------------
+TRAINING
+------------------------------------------------------------
+Batch size: 64
+Epochs: 200
+Learning rate: 0.0002
+Weight decay: 0.0001
+Optimizer: AdamW
+Scheduler: CosineAnnealingLR
+Early stopping patience: 25
+Gradient clipping: 1.0
+AMP: True
+Device: cuda
+GPU: Tesla T4
+
+------------------------------------------------------------
+LOSS
+------------------------------------------------------------
+Delta MSE weight: 1.0
+Output MSE weight: 1.0
+Huber weight: 0.25
+Amplitude weight: 0.25
+Snap weight: 0.0025
+DC weight: 0.05
+
+QPSK reference radius: 1.381239
+
+Full loss formula: DELTA*mse_delta + OUTPUT*mse_out + HUBER*huber_out + AMP*mse_amp + SNAP*snap_loss + DC*dc_loss
+
+------------------------------------------------------------
+RESULTS
+------------------------------------------------------------
+Best epoch: 78
+Best validation loss: 0.118762
+Best validation output MSE: 0.051017
+
+Test MSE: 0.341616
+Test RMSE: 0.584479
+Test BER: 0.105544
+Test EVM: 58.265069%
+
+I RMSE: 0.583681
+Q RMSE: 0.585276
+Mean error magnitude: 0.497244
+Median error magnitude: 0.211092
+90th percentile error: 1.671198
+95th percentile error: 2.097383
+
+------------------------------------------------------------
+V4 COMPARISON
+------------------------------------------------------------
+V4 Test MSE: NOT AVAILABLE
+V5 Test MSE: 0.341616
+MSE improvement: NOT AVAILABLE
+
+V4 BER: NOT AVAILABLE
+V5 BER: 0.105544
+BER improvement: NOT AVAILABLE
+
+V4 EVM: NOT AVAILABLE
+V5 EVM: 58.265069
+EVM improvement: NOT AVAILABLE
+
+------------------------------------------------------------
+COMPUTATIONAL
+------------------------------------------------------------
+Parameter count: 851,650
+Training time: 0.64 mins
+Average epoch time: 0.37 s
+
+------------------------------------------------------------
+FILES
+------------------------------------------------------------
+Notebook: transformer_nle_v5.ipynb
+Best model: ./models/transformer_nle_v5_best.pth
+Results directory: ./results
+
+Generated files:
+    transformer_nle_v5_best.pth
+    transformer_v5_parameters.txt
+    transformer_v5_results.csv
+    transformer_v5_training_history.npy
+    transformer_v5_constellation.png
+    transformer_v5_error_histogram.png
+    transformer_v5_loss_curves.png
+    v4_vs_v5_comparison.csv
+    v4_vs_v5_constellation.png

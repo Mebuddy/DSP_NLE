@@ -1,0 +1,40 @@
+==================================================
+TRANSFORMER NLE - ITERATION 2 PARAMETERS
+==================================================
+
+[ 1. DATASET & WINDOWING ]
+- NLE OFF Data: data/nle_off_10k.npy
+- NLE ON Data: data/nle_on_10k.npy
+- Sequence Window Size: 256
+- Window Stride: 128
+- Train/Validation Split: 80% / 20% (Split before windowing to prevent leakage)
+- Normalization: Joint Standardization (Mean & Std computed on NLE OFF, applied to both)
+
+[ 2. MODEL ARCHITECTURE (Transformer Encoder V2) ]
+- d_model: 128
+- nhead: 4
+- num_layers: 3
+- dim_feedforward: 256
+- dropout: 0.1
+- norm_first: True (Pre-normalization)
+- Positional Encoding: Enabled (with ablation toggle `USE_POSITIONAL_ENCODING`)
+
+[ 3. TRAINING HYPERPARAMETERS ]
+- Optimizer: AdamW
+- Learning Rate: 3e-4
+- Weight Decay: 1e-4
+- LR Scheduler: CosineAnnealingLR (T_max = 150)
+- Max Epochs: 150
+- Batch Size: 32
+- Early Stopping Patience: 20 epochs
+- Gradient Clipping: clip_grad_norm_ to 1.0
+
+[ 4. LOSS FUNCTION WEIGHTS ]
+- IQ Correction MSE: 1.0 (Base target)
+- Amplitude Preservation MSE: 0.5 (with EPSILON=1e-8 for stability)
+- Dynamic QPSK Snapping Loss: 0.01 (Target radius dynamically estimated from DSP NLE ON)
+- DC-Centering Loss: 0.1
+
+[ 5. INFERENCE & METRICS ]
+- Overlapping Window Reconstruction: Accumulated & Averaged
+- Evaluation Metrics: EVM, Phase-Invariant BER (+0°, +90°, +180°, +270° sweeps), Direct MSE vs DSP NLE ON, Normalized Improvement Ratio
